@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BinSync</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h1>Welcome to BinSync</h1>
+
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
+
+  <button id="signup">Sign Up</button>
+  <button id="signin">Sign In</button>
+  <button id="signout">Sign Out</button>
+
+  <p id="status"></p>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const SUPABASE_URL = "https://qzjzvljzqgqjvvmqzjzv.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6anp2bGp6cGdxanZ2bXF6anp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTk4NzY2MDYsImV4cCI6MjAxNTQ1MjYwNn0.3gWZzRz6gKzv2JZKZV3QxXJZzvZzvZzvZzvZzvZzvZzv";
+
+      const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      document.getElementById("signup").addEventListener("click", async () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const { data, error } = await client.auth.signUp({ email, password });
+        document.getElementById("status").innerText = error ? error.message : "✅ Signup successful!";
+      });
+
+      document.getElementById("signin").addEventListener("click", async () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        document.getElementById("status").innerText = error ? error.message : "✅ Login successful!";
+      });
+
+      document.getElementById("signout").addEventListener("click", async () => {
+        const { error } = await client.auth.signOut();
+        document.getElementById("status").innerText = error ? error.message : "✅ Signed out!";
+      });
+    });
+  </script>
+</body>
+</html>
